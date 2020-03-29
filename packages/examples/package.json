@@ -1,0 +1,43 @@
+{
+  "name": "jss-style-helpers-examples",
+  "version": "0.1.0",
+  "description": "examples for jss style helpers using nextjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trival/jss-style-helpers.git"
+  },
+  "keywords": [
+    "jss",
+    "react",
+    "style",
+    "helpers"
+  ],
+  "author": "Thomas Gorny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trival/jss-style-helpers/issues"
+  },
+  "homepage": "https://github.com/trival/jss-style-helpers#readme",
+  "dependencies": {
+    "next": "^9.3.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-jss": "^10.1.1",
+    "jss-style-helpers": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/node": "12.*",
+    "@types/react": "^16.9.27"
+  },
+  "engines": {
+    "node": ">=8",
+    "yarn": ">=1.13"
+  }
+}

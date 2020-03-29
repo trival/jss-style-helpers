@@ -1,0 +1,50 @@
+{
+  "name": "root",
+  "private": true,
+  "description": "root monorepo for jss style helpers",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "run:examples": "next ./examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trival/jss-style-helpers.git"
+  },
+  "keywords": [
+    "jss",
+    "react",
+    "style",
+    "helpers"
+  ],
+  "author": "Thomas Gorny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trival/jss-style-helpers/issues"
+  },
+  "homepage": "https://github.com/trival/jss-style-helpers#readme",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
+    "jest": "^25.2.3",
+    "prettier": "^2.0.2",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=8",
+    "yarn": ">=1.13"
+  }
+}
