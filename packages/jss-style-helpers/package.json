@@ -1,10 +1,10 @@
 {
   "name": "jss-style-helpers",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Custom react-jss theme with helper functions based on system ui theme specification",
-  "main": "dist/src/index",
-  "types": "dist/src/index.d.ts",
-  "typings": "dist/src/index.d.ts",
+  "main": "dist/index",
+  "types": "src/index.ts",
+  "typings": "src/index.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -46,6 +46,7 @@
   },
   "files": [
     "dist",
+    "src",
     "LICENSE",
     "README.md",
     "package.json"

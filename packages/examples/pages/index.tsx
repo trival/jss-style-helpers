@@ -7,8 +7,8 @@ export default () => {
 
 const useStyles = makeStyles($ => ({
 	foo: $.compose(
-		$.m(1),
-		$.p([2, 3, 4]),
+		$.m(1, 2, 3),
+		$.p(2, 3, 4),
 		$.bg($.colors.gray),
 		$.c($.colors.fontLight),
 	),

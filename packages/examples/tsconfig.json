@@ -15,6 +15,5 @@
     "jsx": "preserve"
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "references": [{ "path": "../jss-style-helpers" }]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

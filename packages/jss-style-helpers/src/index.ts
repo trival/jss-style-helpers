@@ -3,6 +3,7 @@ import {
 	WithStylesOptions,
 	ClassNameMap,
 	CSSProperties,
+	// makeStyles,
 } from '@material-ui/styles'
 import { DisplayProperty, PositionProperty } from 'csstype'
 import { createUseStyles } from 'react-jss'
@@ -159,18 +160,26 @@ export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig>(
 	const theme = {
 		compose,
 		mediaQueries,
-		...makeStyleHelpers(themeConfig as any),
+		...makeStyleHelpers(themeConfig),
 		...themeConfig,
 	}
 
+	function myMakeStyles<ClassKey extends string = string>(
+		styles: Styles<typeof theme, never, ClassKey>,
+		options?: Omit<WithStylesOptions<typeof theme>, 'withTheme'>,
+	): (props?: any) => ClassNameMap<ClassKey>
 	function myMakeStyles<
 		Props extends {} = {},
 		ClassKey extends string = string
 	>(
 		styles: Styles<typeof theme, Props, ClassKey>,
 		options?: Omit<WithStylesOptions<typeof theme>, 'withTheme'>,
-	): (props?: Props) => ClassNameMap<ClassKey> {
-		return createUseStyles(styles as any, options) as any
+	): (props: Props) => ClassNameMap<ClassKey>
+	function myMakeStyles<
+		Props extends {} = {},
+		ClassKey extends string = string
+	>(styles: any, options?: any): (props?: Props) => ClassNameMap<ClassKey> {
+		return createUseStyles(styles, options) as any
 	}
 
 	return { theme, makeStyles: myMakeStyles }

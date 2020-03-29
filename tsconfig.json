@@ -15,8 +15,4 @@
   },
   "exclude": ["node_modules"],
   "include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"]
-  // "references": [
-  //   { "path": "./packages/examples" },
-  //   { "path": "./packages/js-style-helpers" }
-  // ]
 }
