@@ -3,9 +3,11 @@
   "private": true,
   "description": "root monorepo for jss style helpers",
   "scripts": {
+    "build": "cd packages/jss-style-helpers && yarn build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "run:examples": "next ./examples"
+    "run:examples": "next ./examples",
+    "deploy": "cd packages/jss-style-helpers && yarn publish"
   },
   "repository": {
     "type": "git",

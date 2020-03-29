@@ -5,6 +5,11 @@ export default () => {
 	return <h1 className={styles.foo}>Hello World</h1>
 }
 
-const useStyles = makeStyles(t => ({
-	foo: t.compose(t.m(0), t.bg(t.colors.gray), t.c(t.colors.fontDark)),
+const useStyles = makeStyles($ => ({
+	foo: $.compose(
+		$.m(1),
+		$.p([2, 3, 4]),
+		$.bg($.colors.gray),
+		$.c($.colors.fontLight),
+	),
 }))
