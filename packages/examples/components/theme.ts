@@ -11,9 +11,12 @@ export const fontSizeH1 = '2.5rem'
 export const fontSizeH2 = '2rem'
 
 export const colorWhite = '#fff'
+export const colorLight = '#eee'
+export const colorDark = '#222'
+export const colorRed = 'tomato'
 export const colorGray = '#677'
-export const colorFontLight = colorWhite
-export const colorFontDark = '#222'
+export const colorFontLight = colorLight
+export const colorFontDark = colorDark
 
 export const breakpointLarge = '1200px'
 export const breakpointMedium = '920px'
@@ -37,10 +40,13 @@ export const themeConfig = {
 		h6: fontSizeSmall,
 	},
 	colors: {
+		dark: colorDark,
+		light: colorLight,
 		fontLight: colorFontLight,
 		fontDark: colorFontDark,
 		white: colorWhite,
 		gray: colorGray,
+		red: colorRed,
 	},
 	borders: { basic: 'solid .125rem' },
 	breakpoints: Object.assign(
