@@ -8,7 +8,7 @@ See the README files of the sub packages for more information.
 
 ## Installation
 
-this package works with [react-jss](https://www.npmjs.com/package/react-jss)
+This package works with [react-jss](https://www.npmjs.com/package/react-jss)
 
 ```bash
 npm install react-jss jss-style-helpers

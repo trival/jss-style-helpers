@@ -5,7 +5,7 @@ specification
 
 ## Installation
 
-this package works with [react-jss](https://www.npmjs.com/package/react-jss)
+This package works with [react-jss](https://www.npmjs.com/package/react-jss)
 
 ```bash
 npm install react-jss jss-style-helpers
@@ -99,10 +99,11 @@ const useStyles = makeStyles($ => ({
 ```
 
 The `makeStyle` function simply forwards to react-jss `createUseStyles`, but
-adds autocompletions for all the helpers and theme properties accessible in your
-theme. It uses the material-ui type definitions for autocompletions, but
-otherwise no other code is imported from material-ui. If you are not using
-typescript, you can as well just use the `createUseStyles` function directly
+adds typescript autocompletions for all the helpers and theme properties
+accessible in your theme. It uses the material-ui type definitions for
+autocompletions, but otherwise no other code is imported from material-ui. If
+you are not using typescript, you can as well just use the `createUseStyles`
+function directly
 
 ## Inspiration
 
@@ -110,7 +111,7 @@ This library is strongly inspired by
 [`Styled System`](https://styled-system.com/) and
 [`System UI`](https://system-ui.com/). The theme configuration respects the
 [System UI Theme Specification](https://system-ui.com/theme) and the functions
-try to follow the `styled system` properties behavior.
+try to follow the `Styled System` properties behavior.
 
 ## Documentation
 
@@ -119,7 +120,7 @@ Following functions are available in your theme:
 ### Composition
 
 - `compose`  
-  composes multiple style objects into one.
+   composes multiple style objects into one.
 
 ### Spacing
 
@@ -130,14 +131,12 @@ Following functions are available in your theme:
 - `marginRight` (alias: `mr`)
 - `marginHorizontal` (alias: `mx`)
 - `marginVertical` (alias: `my`)
-
 - `padding` (alias: `p`)
 - `paddingTop` (alias: `pt`)
 - `paddingLeft` (alias: `pl`)
 - `paddingRight` (alias: `pr`)
 - `paddingHorizontal` (alias: `px`)
 - `paddingVertical` (alias: `py`)
-
 - `top` (alias: `t`)
 - `bottom` (alias: `b`)
 - `left` (alias: `l`)

@@ -1,6 +1,6 @@
 {
   "name": "jss-style-helpers",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Custom react-jss theme with helper functions based on system ui theme specification",
   "main": "dist/index",
   "types": "src/index.ts",
@@ -20,7 +20,8 @@
     "jss",
     "react",
     "style",
-    "helpers"
+    "helpers",
+    "styled system"
   ],
   "author": "Thomas Gorny",
   "license": "MIT",
