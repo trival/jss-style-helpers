@@ -1,6 +1,6 @@
 {
   "name": "jss-style-helpers",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Custom react-jss theme with helper functions based on system ui theme specification",
   "main": "dist/index",
   "types": "src/index.ts",
