@@ -133,6 +133,7 @@ Following functions are available in your theme:
 - `marginVertical` (alias: `my`)
 - `padding` (alias: `p`)
 - `paddingTop` (alias: `pt`)
+- `paddingBottom` (alias: `pb`)
 - `paddingLeft` (alias: `pl`)
 - `paddingRight` (alias: `pr`)
 - `paddingHorizontal` (alias: `px`)
@@ -184,7 +185,7 @@ yarn test:watch
 
 ## Contributing
 
-Your contributions and suggestions are greatly appreciated. Submit you issues
+Your contributions and suggestions are greatly appreciated. Submit your issues
 and PRs on [github](https://github.com/trival/jss-style-helpers). Please add
 unit tests for any new or changed functionality. Format, lint and test your code
 with the provided configurations.

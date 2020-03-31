@@ -37,7 +37,7 @@ yarn run:examples
 
 ## Contributing
 
-Your contributions and suggestions are greatly appreciated. Submit you issues
+Your contributions and suggestions are greatly appreciated. Submit your issues
 and PRs on [github](https://github.com/trival/jss-style-helpers). Please add
 unit tests for any new or changed functionality. Format, lint and test your code
 with the provided configurations.
