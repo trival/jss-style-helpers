@@ -35,6 +35,13 @@ Start them with
 yarn run:examples
 ```
 
+When working on the library code, build the project before updating the
+examples.
+
+```bash
+yarn build
+```
+
 ## Contributing
 
 Your contributions and suggestions are greatly appreciated. Submit your issues

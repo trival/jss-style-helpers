@@ -63,7 +63,7 @@ export const themeConfig = {
 			fontSize: fontSizeBig,
 			textTransform: 'uppercase',
 		},
-	},
+	} as const,
 }
 
 const { theme, makeStyles } = makeStyleTheme(themeConfig)

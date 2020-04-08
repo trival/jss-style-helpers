@@ -6,7 +6,7 @@
     "build": "cd packages/jss-style-helpers && yarn build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "run:examples": "next ./examples",
+    "run:examples": "cd packages/examples && yarn dev",
     "deploy": "cd packages/jss-style-helpers && yarn publish"
   },
   "repository": {

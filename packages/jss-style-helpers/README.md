@@ -100,10 +100,8 @@ const useStyles = makeStyles($ => ({
 
 The `makeStyle` function simply forwards to react-jss `createUseStyles`, but
 adds typescript autocompletions for all the helpers and theme properties
-accessible in your theme. It uses the material-ui type definitions for
-autocompletions, but otherwise no other code is imported from material-ui. If
-you are not using typescript, you can as well just use the `createUseStyles`
-function directly
+accessible in your theme. If you are not using typescript, you can as well just
+use the `createUseStyles` function directly
 
 ## Inspiration
 

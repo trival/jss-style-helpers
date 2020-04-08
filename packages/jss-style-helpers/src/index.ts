@@ -1,21 +1,17 @@
-import {
-	Styles,
-	WithStylesOptions,
-	ClassNameMap,
-	CSSProperties,
-	// makeStyles,
-} from '@material-ui/styles'
-import { DisplayProperty, PositionProperty } from 'csstype'
+// import { makeStyles } from '@material-ui/styles'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as JSS from 'jss'
 import { createUseStyles } from 'react-jss'
+import * as CSS from './cssTypes'
 
 type StyleValue = number | string
 
 export type ScaleObject = Record<StyleValue, StyleValue> | StyleValue[]
 
-interface ThemeConfig {
+interface ThemeConfig<BreakPoints extends ScaleObject = ScaleObject> {
 	spacing?: ScaleObject
 	space?: ScaleObject
-	breakpoints?: ScaleObject
+	breakpoints?: BreakPoints
 	colors?: ScaleObject
 	fontSizes?: ScaleObject
 	sizes?: ScaleObject
@@ -60,8 +56,8 @@ export function makeStyleHelpers(config: ThemeConfig) {
 	const wMax = makeSizeFn('maxWidth')
 	const hMax = makeSizeFn('maxHeight')
 
-	const position = makeResponsiveStyleFn<PositionProperty>({}, 'position')
-	const display = makeResponsiveStyleFn<DisplayProperty>({}, 'display')
+	const position = makeResponsiveStyleFn<CSS.Property.Position>({}, 'position')
+	const display = makeResponsiveStyleFn<CSS.Property.Display>({}, 'display')
 
 	return {
 		m,
@@ -148,13 +144,14 @@ export function makeStyleHelpers(config: ThemeConfig) {
 	}
 }
 
-export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig>(
-	themeConfig: T & { breakpoints: B },
+export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig<B>>(
+	themeConfig: T,
 ) {
-	const mediaQueries: B = { ...(themeConfig.breakpoints as B) }
-
-	for (const k in themeConfig.breakpoints as B) {
-		mediaQueries[k] = atBreakpoint((themeConfig.breakpoints as B)[k])
+	const mediaQueries = {} as T['breakpoints']
+	if (themeConfig.breakpoints) {
+		for (const k in themeConfig.breakpoints) {
+			mediaQueries![k] = atBreakpoint(themeConfig.breakpoints[k])
+		}
 	}
 
 	const theme = {
@@ -164,23 +161,18 @@ export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig>(
 		...themeConfig,
 	}
 
-	function myMakeStyles<ClassKey extends string = string>(
-		styles: Styles<typeof theme, never, ClassKey>,
-		options?: Omit<WithStylesOptions<typeof theme>, 'withTheme'>,
-	): (props?: any) => ClassNameMap<ClassKey>
 	function myMakeStyles<
 		Props extends {} = {},
 		ClassKey extends string = string
 	>(
-		styles: Styles<typeof theme, Props, ClassKey>,
-		options?: Omit<WithStylesOptions<typeof theme>, 'withTheme'>,
-	): (props: Props) => ClassNameMap<ClassKey>
-	function myMakeStyles<
-		Props extends {} = {},
-		ClassKey extends string = string
-	>(styles: any, options?: any): (props?: Props) => ClassNameMap<ClassKey> {
+		styles: (t?: typeof theme) => StyleRules<Props, ClassKey>,
+		// | StyleRules<Props, ClassKey>,
+		options?: JSS.StyleSheetFactoryOptions,
+	): (props?: Props) => Record<ClassKey, string> {
 		return createUseStyles(styles, options) as any
 	}
+
+	// makeStyles()
 
 	return { theme, makeStyles: myMakeStyles }
 }
@@ -223,3 +215,63 @@ function compose(...args: CSSProperties[]): CSSProperties {
 function atBreakpoint(s: StyleValue) {
 	return `@media screen and (min-width: ${s})`
 }
+
+// Type helpers
+
+type JSSFontface = CSS.AtRule.FontFace & { fallbacks?: CSS.AtRule.FontFace[] }
+
+type PropsFunc<Props extends object, T> = (props: Props) => T
+
+/**
+ * Allows the user to augment the properties available
+ */
+export interface BaseCSSProperties extends CSS.Properties<number | string> {
+	'@font-face'?: JSSFontface | JSSFontface[]
+}
+
+export interface CSSProperties extends BaseCSSProperties {
+	// Allow pseudo selectors and media queries
+	// `unknown` is used since TS does not allow assigning an interface without
+	// an index signature to one with an index signature. This is to allow type safe
+	// module augmentation.
+	// Technically we want any key not typed in `BaseCSSProperties` to be of type
+	// `CSSProperties` but this doesn't work. The index signature needs to cover
+	// BaseCSSProperties as well. Usually you would use `BaseCSSProperties[keyof BaseCSSProperties]`
+	// but this would not allow assigning React.CSSProperties to CSSProperties
+	[k: string]: unknown | CSSProperties
+}
+
+type BaseCreateCSSProperties<Props extends object = {}> = {
+	[P in keyof BaseCSSProperties]:
+		| BaseCSSProperties[P]
+		| PropsFunc<Props, BaseCSSProperties[P]>
+}
+
+interface CreateCSSProperties<Props extends object = {}>
+	extends BaseCreateCSSProperties<Props> {
+	// Allow pseudo selectors and media queries
+	[k: string]:
+		| BaseCreateCSSProperties<Props>[keyof BaseCreateCSSProperties<Props>]
+		| CreateCSSProperties<Props>
+}
+
+/**
+ * This is basically the API of JSS. It defines a Map<string, CSS>,
+ * where
+ * - the `keys` are the class (names) that will be created
+ * - the `values` are objects that represent CSS rules (`React.CSSProperties`).
+ *
+ * if only `CSSProperties` are matched `Props` are inferred to `any`
+ */
+export type StyleRules<
+	Props extends object = {},
+	ClassKey extends string = string
+> = Record<
+	ClassKey,
+	// JSS property bag
+	| CSSProperties
+	// JSS property bag where values are based on props
+	| CreateCSSProperties<Props>
+	// JSS property bag based on props
+	| PropsFunc<Props, CreateCSSProperties<Props>>
+>

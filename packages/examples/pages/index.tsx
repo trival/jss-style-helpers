@@ -1,8 +1,14 @@
 import { makeStyles } from '../components/theme'
+import { Typography } from '../components/typography'
 
 export default () => {
 	const styles = useStyles()
-	return <h1 className={styles.foo}>Hello World</h1>
+	return (
+		<article>
+			<h1 className={styles.foo}>Hello World</h1>
+			<Typography variant="active">An active text</Typography>
+		</article>
+	)
 }
 
 const useStyles = makeStyles($ => ({
