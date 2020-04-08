@@ -165,7 +165,9 @@ export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig<B>>(
 		Props extends {} = {},
 		ClassKey extends string = string
 	>(
-		styles: (t?: typeof theme) => StyleRules<Props, ClassKey>,
+		styles:
+			| StyleRules<Props, ClassKey>
+			| ((t: typeof theme) => StyleRules<Props, ClassKey>),
 		// | StyleRules<Props, ClassKey>,
 		options?: JSS.StyleSheetFactoryOptions,
 	): (props?: Props) => Record<ClassKey, string> {
@@ -273,5 +275,5 @@ export type StyleRules<
 	// JSS property bag where values are based on props
 	| CreateCSSProperties<Props>
 	// JSS property bag based on props
-	| PropsFunc<Props, CreateCSSProperties<Props>>
+	| PropsFunc<Props, CSSProperties>
 >
