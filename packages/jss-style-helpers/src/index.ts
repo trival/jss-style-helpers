@@ -190,12 +190,16 @@ export function makeStyleHelpers<
 }
 
 export function makeStyleTheme<
-	BreakPoints extends ScaleArray,
-	Spacing extends ScaleObject,
-	Colors extends ScaleObject,
+	ConfigObjects extends {} = {},
+	BreakPoints extends ScaleArray = ScaleArray,
+	Spacing extends ScaleObject = ScaleObject,
+	Colors extends ScaleObject = ScaleObject,
 	Sizes extends ScaleObject = ScaleObject,
 	FontSizes extends ScaleObject = ScaleObject
->(themeConfig: ThemeConfig<BreakPoints, Spacing, Colors, Sizes, FontSizes>) {
+>(
+	themeConfig: ThemeConfig<BreakPoints, Spacing, Colors, Sizes, FontSizes> &
+		ConfigObjects,
+) {
 	const mediaQueries = {} as BreakPoints
 	if (themeConfig.breakpoints) {
 		for (const k in themeConfig.breakpoints) {

@@ -3,6 +3,5 @@
   "semi": false,
   "singleQuote": true,
   "bracketSpacing": true,
-  "proseWrap": "always",
-  "arrowParens": "avoid"
+  "proseWrap": "always"
 }

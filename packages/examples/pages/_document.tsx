@@ -3,13 +3,13 @@ import React from 'react'
 import { SheetsRegistry, JssProvider, createGenerateId } from 'react-jss'
 
 export default class JssDocument extends Document {
-	static async getInitialProps(ctx) {
+	static async getInitialProps(ctx: any) {
 		const registry = new SheetsRegistry()
 		const generateId = createGenerateId()
 		const originalRenderPage = ctx.renderPage
 		ctx.renderPage = () =>
 			originalRenderPage({
-				enhanceApp: App => props => (
+				enhanceApp: (App: any) => (props: any) => (
 					<JssProvider registry={registry} generateId={generateId}>
 						<App {...props} />
 					</JssProvider>

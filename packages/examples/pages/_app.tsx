@@ -7,7 +7,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 	useEffect(() => {
 		const style = document.getElementById('server-side-styles')
 
-		if (style) {
+		if (style && style.parentNode) {
 			style.parentNode.removeChild(style)
 		}
 	}, [])
