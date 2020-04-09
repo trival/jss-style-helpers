@@ -15,7 +15,8 @@ yarn add react-jss jss-style-helpers
 
 ## Usage
 
-Create a theme
+Create a theme. For best typescript autocompletions, declare the config object
+with `as const`.
 
 ```javascript
 // theme.js
@@ -29,7 +30,7 @@ const themeConfig = {
     dark: '#222',
     red: 'tomato',
   },
-}
+} as const
 
 const { theme, makeStyles } = makeStyleTheme(themeConfig)
 export { theme, makeStyles }
@@ -148,6 +149,7 @@ Responsive spacing functions. String values and indices are looked up in the
 
 - `color` (alias: `c`)
 - `backgroundColor` (alias: `bg`)
+- `borderColor` (alias: `bc`)
 
 Responsive color functions. String values and indices are looked up in the
 `colors` theme object.
@@ -164,12 +166,29 @@ Responsive color functions. String values and indices are looked up in the
 Responsive size functions. String values and indices are looked up in the
 `sizes` theme object.
 
-### Other
+### FontSize
+
+- `fontSize` (alias: `fs`)
+
+Responsive size functions. String values and indices are looked up in the
+`fontSizes` theme object.
+
+### Other CSS property shorthands
 
 - `position` (alias: `pos`)
 - `display` (alias: `d`)
 
 These provide just responsive shortcuts without index lookups.
+
+### Custom responsive value
+
+- `responsive`  
+   given a CSS property name, you can specify responsive values corresponding to
+  your breakpoints.
+
+```javascript
+theme.responsive('borderWidth', '1px', '2px', null, '4px')
+```
 
 ## Development
 

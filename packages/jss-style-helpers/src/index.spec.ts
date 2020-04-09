@@ -2,7 +2,7 @@ import { makeStyleTheme } from './index'
 
 describe('style system', () => {
 	describe('style theme functions', () => {
-		const spacing = [0, '1px', '2px', '3px']
+		const spacing = [0, '1px', '2px', '3px'] as const
 		const breakpoints = ['20em', '40em', '60em']
 		const colors = {
 			red: 'tomato',
@@ -14,7 +14,12 @@ describe('style system', () => {
 			third: '33.33333%',
 		}
 
-		const { theme } = makeStyleTheme({ spacing, breakpoints, colors, sizes })
+		const { theme } = makeStyleTheme({
+			spacing,
+			breakpoints,
+			colors,
+			sizes,
+		})
 
 		it('picks margins from defined spacing', () => {
 			expect(theme.m(0)).toMatchInlineSnapshot(`
@@ -279,11 +284,29 @@ describe('style system', () => {
 			expect(theme.pos).toBe(theme.position)
 			expect(theme.c).toBe(theme.color)
 			expect(theme.bg).toBe(theme.backgroundColor)
+			expect(theme.bc).toBe(theme.borderColor)
+			expect(theme.fs).toBe(theme.fontSize)
+		})
+
+		it('creates custom responsive values', () => {
+			expect(
+				theme.responsive('position', 'absolute', null, 'relative', 'fixed'),
+			).toMatchInlineSnapshot(`
+			Object {
+			  "@media screen and (min-width: 40em)": Object {
+			    "position": "relative",
+			  },
+			  "@media screen and (min-width: 60em)": Object {
+			    "position": "fixed",
+			  },
+			  "position": "absolute",
+			}
+		`)
 		})
 	})
 
 	describe('makeStyleTheme', () => {
-		const spacing = [0, '1px', '2px', '3px']
+		const spacing = [0, '1px', '2px', '3px'] as const
 		const breakpoints = ['20em', '40em', '60em']
 
 		it('create the helper object', () => {
@@ -333,22 +356,52 @@ describe('style system', () => {
 		it('composes responsive styles', () => {
 			const { theme } = makeStyleTheme({ spacing, breakpoints })
 			const $ = theme
-			const styleObj = $.compose($.m(1, 2, 3), $.p(1, 2, 3), $.t(1, 2, 3))
-			expect(styleObj).toMatchObject({
-				top: '1px',
-				margin: '1px',
-				padding: '1px',
-				'@media screen and (min-width: 20em)': {
-					top: '2px',
-					margin: '2px',
-					padding: '2px',
+			const styleObj = $.compose(
+				$.m(1, 2, 3),
+				$.p(1, 2, 3),
+				$.t(1, 2, 3),
+				$.responsive('display', 'block', 'inline-block', null, 'flex'),
+			)
+			expect(styleObj).toMatchInlineSnapshot(
+				{
+					top: '1px',
+					margin: '1px',
+					padding: '1px',
+					display: 'block',
+					'@media screen and (min-width: 20em)': {
+						top: '2px',
+						margin: '2px',
+						padding: '2px',
+					},
+					'@media screen and (min-width: 40em)': {
+						top: '3px',
+						margin: '3px',
+						padding: '3px',
+					},
 				},
-				'@media screen and (min-width: 40em)': {
-					top: '3px',
-					margin: '3px',
-					padding: '3px',
-				},
-			})
+				`
+			Object {
+			  "@media screen and (min-width: 20em)": Object {
+			    "display": "inline-block",
+			    "margin": "2px",
+			    "padding": "2px",
+			    "top": "2px",
+			  },
+			  "@media screen and (min-width: 40em)": Object {
+			    "margin": "3px",
+			    "padding": "3px",
+			    "top": "3px",
+			  },
+			  "@media screen and (min-width: 60em)": Object {
+			    "display": "flex",
+			  },
+			  "display": "block",
+			  "margin": "1px",
+			  "padding": "1px",
+			  "top": "1px",
+			}
+		`,
+			)
 		})
 	})
 })

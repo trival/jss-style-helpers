@@ -4,60 +4,93 @@ import * as JSS from 'jss'
 import { createUseStyles } from 'react-jss'
 import * as CSS from './cssTypes'
 
-type StyleValue = number | string
+type StyleValue = 0 | (string & {})
 
-export type ScaleObject = Record<StyleValue, StyleValue> | StyleValue[]
+export type ScaleArray =
+	| readonly StyleValue[]
+	| (readonly StyleValue[] & Record<string | number, StyleValue>)
+export type ScaleObject = Record<string | number, StyleValue> | ScaleArray
 
-interface ThemeConfig<BreakPoints extends ScaleObject = ScaleObject> {
-	spacing?: ScaleObject
-	space?: ScaleObject
+interface ThemeConfig<
+	BreakPoints extends ScaleArray = ScaleArray,
+	Spacing extends ScaleObject = ScaleObject,
+	Colors extends ScaleObject = ScaleObject,
+	Sizes extends ScaleObject = ScaleObject,
+	FontSizes extends ScaleObject = ScaleObject
+> {
+	spacing?: Spacing
+	space?: Spacing
 	breakpoints?: BreakPoints
-	colors?: ScaleObject
-	fontSizes?: ScaleObject
-	sizes?: ScaleObject
+	colors?: Colors
+	fontSizes?: FontSizes
+	sizes?: Sizes
 }
 
-export function makeStyleHelpers(config: ThemeConfig) {
-	const spacing = config.spacing || config.space || {}
-	const colors = config.colors || {}
-	const sizes = config.sizes || {}
-	const breakpoints = config.breakpoints || {}
+export function makeStyleHelpers<
+	BreakPoints extends ScaleArray = ScaleArray,
+	Spacing extends ScaleObject = ScaleObject,
+	Colors extends ScaleObject = ScaleObject,
+	Sizes extends ScaleObject = ScaleObject,
+	FontSizes extends ScaleObject = ScaleObject
+>(config: ThemeConfig<BreakPoints, Spacing, Colors, Sizes, FontSizes>) {
+	const spacing: Spacing = config.spacing || config.space || ({} as Spacing)
+	const colors: Colors = config.colors || ({} as Colors)
+	const sizes: Sizes = config.sizes || ({} as Sizes)
+	const fontSizes: FontSizes = config.fontSizes || ({} as FontSizes)
+	const breakpoints: BreakPoints =
+		config.breakpoints || (([] as unknown) as BreakPoints)
 
-	const makeSpaceFn = makeResponsiveStyleFn.bind(null, spacing)
-	const makeColorFn = makeResponsiveStyleFn.bind(null, colors)
-	const makeSizeFn = makeResponsiveStyleFn.bind(null, sizes)
+	const m = makeResponsiveStyleFn(spacing, 'margin')
+	const mt = makeResponsiveStyleFn(spacing, 'marginTop')
+	const mb = makeResponsiveStyleFn(spacing, 'marginBottom')
+	const mr = makeResponsiveStyleFn(spacing, 'marginRight')
+	const ml = makeResponsiveStyleFn(spacing, 'marginLeft')
+	const my = makeResponsiveStyleFn(spacing, ['marginTop', 'marginBottom'])
+	const mx = makeResponsiveStyleFn(spacing, ['marginRight', 'marginLeft'])
+	const p = makeResponsiveStyleFn(spacing, 'padding')
+	const pt = makeResponsiveStyleFn(spacing, 'paddingTop')
+	const pb = makeResponsiveStyleFn(spacing, 'paddingBottom')
+	const pr = makeResponsiveStyleFn(spacing, 'paddingRight')
+	const pl = makeResponsiveStyleFn(spacing, 'paddingLeft')
+	const py = makeResponsiveStyleFn(spacing, ['paddingTop', 'paddingBottom'])
+	const px = makeResponsiveStyleFn(spacing, ['paddingRight', 'paddingLeft'])
+	const t = makeResponsiveStyleFn(spacing, 'top')
+	const b = makeResponsiveStyleFn(spacing, 'bottom')
+	const r = makeResponsiveStyleFn(spacing, 'right')
+	const l = makeResponsiveStyleFn(spacing, 'left')
 
-	const m = makeSpaceFn('margin')
-	const mt = makeSpaceFn('marginTop')
-	const mb = makeSpaceFn('marginBottom')
-	const mr = makeSpaceFn('marginRight')
-	const ml = makeSpaceFn('marginLeft')
-	const my = makeSpaceFn(['marginTop', 'marginBottom'])
-	const mx = makeSpaceFn(['marginRight', 'marginLeft'])
-	const p = makeSpaceFn('padding')
-	const pt = makeSpaceFn('paddingTop')
-	const pb = makeSpaceFn('paddingBottom')
-	const pr = makeSpaceFn('paddingRight')
-	const pl = makeSpaceFn('paddingLeft')
-	const py = makeSpaceFn(['paddingTop', 'paddingBottom'])
-	const px = makeSpaceFn(['paddingRight', 'paddingLeft'])
-	const t = makeSpaceFn('top')
-	const b = makeSpaceFn('bottom')
-	const r = makeSpaceFn('right')
-	const l = makeSpaceFn('left')
+	const c = makeResponsiveStyleFn(colors, 'color')
+	const bg = makeResponsiveStyleFn(colors, 'backgroundColor')
+	const bc = makeResponsiveStyleFn(colors, 'borderColor')
 
-	const c = makeColorFn('color')
-	const bg = makeColorFn('backgroundColor')
+	const w = makeResponsiveStyleFn(sizes, 'width')
+	const h = makeResponsiveStyleFn(sizes, 'height')
+	const wMin = makeResponsiveStyleFn(sizes, 'minWidth')
+	const hMin = makeResponsiveStyleFn(sizes, 'minHeight')
+	const wMax = makeResponsiveStyleFn(sizes, 'maxWidth')
+	const hMax = makeResponsiveStyleFn(sizes, 'maxHeight')
 
-	const w = makeSizeFn('width')
-	const h = makeSizeFn('height')
-	const wMin = makeSizeFn('minWidth')
-	const hMin = makeSizeFn('minHeight')
-	const wMax = makeSizeFn('maxWidth')
-	const hMax = makeSizeFn('maxHeight')
+	const fs = makeResponsiveStyleFn(fontSizes, 'fontSize')
 
-	const position = makeResponsiveStyleFn<CSS.Property.Position>({}, 'position')
-	const display = makeResponsiveStyleFn<CSS.Property.Display>({}, 'display')
+	const position = makeResponsiveStyleFn<CSS.Property.Position>(
+		{} as ScaleObject,
+		'position',
+	)
+	const display = makeResponsiveStyleFn<CSS.Property.Display>(
+		{} as ScaleObject,
+		'display',
+	)
+
+	function responsive<PropKey extends keyof CSS.Properties>(
+		cssProperty: PropKey,
+		generalStyle: CSS.Properties[PropKey],
+		...responsiveStyles: (CSS.Properties[PropKey] | null | undefined)[]
+	) {
+		return makeResponsiveStyleFn({} as ScaleObject, cssProperty)(
+			generalStyle as any,
+			...(responsiveStyles as any),
+		)
+	}
 
 	return {
 		m,
@@ -100,6 +133,8 @@ export function makeStyleHelpers(config: ThemeConfig) {
 		color: c,
 		bg,
 		backgroundColor: bg,
+		bc,
+		borderColor: bc,
 		w,
 		width: w,
 		wMax,
@@ -116,17 +151,27 @@ export function makeStyleHelpers(config: ThemeConfig) {
 		pos: position,
 		display,
 		d: display,
+		fs,
+		fontSize: fs,
+
+		responsive,
+
+		breakpoints,
+		spacing,
+		colors,
+		sizes,
+		fontSizes,
 	} as const
 
-	function makeResponsiveStyleFn<S extends StyleValue = StyleValue>(
-		scale: ScaleObject,
-		keys: string | string[],
-	) {
+	function makeResponsiveStyleFn<
+		S extends StyleValue = StyleValue,
+		O extends ScaleObject = ScaleObject
+	>(scale: O, keys: string | string[]) {
 		const keysArray = Array.isArray(keys) ? keys : [keys]
 
 		return (
-			generalStyle: S,
-			...responsiveStyles: Array<S | null | undefined>
+			generalStyle: keyof O | S,
+			...responsiveStyles: Array<keyof O | S | null | undefined>
 		) =>
 			responsiveStyles.reduce(
 				(styles, styleVal, i) =>
@@ -134,23 +179,27 @@ export function makeStyleHelpers(config: ThemeConfig) {
 						? merge(styles, {
 								[atBreakpoint(breakpoints[i])]: makeStyleObject(
 									keysArray,
-									styleVal,
+									styleVal as string,
 									scale,
 								),
 						  })
 						: styles,
-				makeStyleObject(keysArray, generalStyle, scale),
+				makeStyleObject(keysArray, generalStyle as string, scale),
 			)
 	}
 }
 
-export function makeStyleTheme<B extends ScaleObject, T extends ThemeConfig<B>>(
-	themeConfig: T,
-) {
-	const mediaQueries = {} as T['breakpoints']
+export function makeStyleTheme<
+	BreakPoints extends ScaleArray,
+	Spacing extends ScaleObject,
+	Colors extends ScaleObject,
+	Sizes extends ScaleObject = ScaleObject,
+	FontSizes extends ScaleObject = ScaleObject
+>(themeConfig: ThemeConfig<BreakPoints, Spacing, Colors, Sizes, FontSizes>) {
+	const mediaQueries = {} as BreakPoints
 	if (themeConfig.breakpoints) {
 		for (const k in themeConfig.breakpoints) {
-			mediaQueries![k] = atBreakpoint(themeConfig.breakpoints[k])
+			;(mediaQueries as any)[k] = atBreakpoint(themeConfig.breakpoints[k])
 		}
 	}
 
@@ -197,7 +246,7 @@ function makeStyleObject(
 }
 
 function get(n: StyleValue, scale: ScaleObject) {
-	return scale[n as any] || n
+	return (scale as any)[n] || n
 }
 
 function merge(a: any, b: any) {
