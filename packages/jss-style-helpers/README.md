@@ -140,8 +140,9 @@ Following functions are available in your theme:
 - `compose`  
    composes multiple style objects into one.
 - `apply`  
-   takes a style object and applies a responsive helper function if the key name
-  matches the helper name.
+   takes a style object and applies responsive helper functions if the key name matches
+  the helper name. If it sees an array value, it converts the array to responsive
+  styles.
 - `fromProps`  
    like `apply`, but filters out all keys that don't match a helper function, so
   that other props won't break the styles
