@@ -170,10 +170,17 @@ export function makeStyleHelpers<
 		const keysArray = Array.isArray(keys) ? keys : [keys]
 
 		return (
-			generalStyle: keyof O | S,
+			generalStyle:
+				| (keyof O | S)
+				| [keyof O | S, ...Array<keyof O | S | null | undefined>],
 			...responsiveStyles: Array<keyof O | S | null | undefined>
-		) =>
-			responsiveStyles.reduce(
+		) => {
+			if (Array.isArray(generalStyle)) {
+				const [firstArg, ...args] = generalStyle
+				generalStyle = firstArg
+				responsiveStyles = args
+			}
+			return responsiveStyles.reduce(
 				(styles, styleVal, i) =>
 					styleVal != null
 						? merge(styles, {
@@ -186,6 +193,7 @@ export function makeStyleHelpers<
 						: styles,
 				makeStyleObject(keysArray, generalStyle as string, scale),
 			)
+		}
 	}
 }
 
@@ -207,10 +215,20 @@ export function makeStyleTheme<
 		}
 	}
 
+	const helpers = makeStyleHelpers(themeConfig)
+
+	function fromProps(props: { [key: string]: any }) {
+		const styleObj = Object.keys(props)
+			.filter((key) => typeof (helpers as any)[key] === 'function')
+			.map((key) => (helpers as any)[key](props[key]))
+		return compose(...styleObj)
+	}
+
 	const theme = {
 		compose,
 		mediaQueries,
-		...makeStyleHelpers(themeConfig),
+		fromProps,
+		...helpers,
 		...themeConfig,
 	}
 
@@ -243,7 +261,7 @@ function makeStyleObject(
 	scale: ScaleObject,
 ) {
 	return compose(
-		...keys.map(key => ({
+		...keys.map((key) => ({
 			[key]: get(styleVal, scale),
 		})),
 	)
@@ -269,6 +287,17 @@ function compose(...args: CSSProperties[]): CSSProperties {
 
 function atBreakpoint(s: StyleValue) {
 	return `@media screen and (min-width: ${s})`
+}
+
+type ArrayType<A> = A extends Array<infer T> ? T : never
+export type StylePropsType<T> = T extends (...args: infer R) => any
+	? ArrayType<R>
+	: never
+export type StyleProps<
+	T extends { [S in keyof StyleHelpers]: any },
+	K extends keyof StyleHelpers
+> = {
+	[S in K]?: StylePropsType<T[S]>
 }
 
 // Type helpers

@@ -6,12 +6,12 @@ export default () => {
 	return (
 		<article>
 			<h1 className={styles.foo}>Hello World</h1>
-			<Typography variant="active">An active text</Typography>
+			<Typography variant="active">Some active text</Typography>
 		</article>
 	)
 }
 
-const useStyles = makeStyles($ => ({
+const useStyles = makeStyles(($) => ({
 	foo: $.compose(
 		// compose your helpers
 
@@ -21,17 +21,24 @@ const useStyles = makeStyles($ => ({
 		// responsive vertical margin, respects the 3 defined breakpoints
 		$.my(1, 2, 3, 4),
 
-		// responsive padding
-		$.p(2, 3, 4),
+		// responsive padding (also possible as array)
+		$.p([2, 3, 4]),
 
 		// backgroundColor
 		$.bg($.colors.red),
 
-		// color string is read from `colors` theme property
+		// color string is looked up in the `colors` theme property
 		$.c('light'),
+
+		// borderColor - values are passed as are, if they cannot be looked up
+		$.bc('#abc'),
+
+		// style values without a dedicated helper function can use the responsive helper
+		$.responsive('borderWidth', 'thin', null, 'thick'),
 
 		// use other react-jss style properties
 		{
+			borderStyle: 'solid',
 			boxShadow: `0 2px 3px ${$.colors.dark}`,
 		},
 	),

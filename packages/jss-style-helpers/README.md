@@ -70,32 +70,47 @@ export default () => {
   return <h1 className={styles.foo}>Hello World</h1>
 }
 
-const useStyles = makeStyles($ => ({
+const useStyles = makeStyles(($) => ({
   // $ is your theme, choose whatever name you want :)
 
+  // compose your styles with the helper functions
   foo: $.compose(
-    // compose your helpers
-
     // reset horizontal margin: {marginLeft: 0, marginRight: 0}
     $.mx(0),
 
     // responsive vertical margin, respects the 3 defined breakpoints
     $.my(1, 2, 3, 4),
 
-    // responsive padding
-    $.p(2, 3, 4),
+    // responsive padding (also possible as array)
+    $.p([2, 3, 4]),
 
     // backgroundColor
     $.bg($.colors.red),
 
-    // color string is read from `colors` theme property
+    // color string is looked up in the `colors` theme property
     $.c('light'),
+
+    // borderColor - values are passed as are, if they cannot be looked up
+    $.bc('#123'),
+
+    // style values without a dedicated helper function can use the responsive helper
+    $.responsive('borderWidth', 'thin', null, 'thick'),
 
     // use other react-jss style properties
     {
       boxShadow: `0 2px 3px ${$.colors.dark}`,
     },
   ),
+
+  // or use the shorthand apply function, same as above:
+  bar: $.apply({
+    mx: 0,
+    my: [1, 2, 3, 4],
+    p: [2, 3, 4],
+    bg: $.colors.red,
+    c: 'light',
+    boxShadow: `0 2px 3px ${$.colors.dark}`,
+  }),
 }))
 ```
 
@@ -120,6 +135,12 @@ Following functions are available in your theme:
 
 - `compose`  
    composes multiple style objects into one.
+- `apply`  
+   takes a style object and applies a responsive helper function if the key name
+  matches the helper name.
+- `fromProps`  
+   like `apply`, but filters out all keys that don't match a helper function, so
+  that other props won't break the styles
 
 ### Spacing
 

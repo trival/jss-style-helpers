@@ -54,8 +54,22 @@ describe('style system', () => {
 				`)
 		})
 
-		it('can get responsive arrays', () => {
+		it('can get responsive parameters', () => {
 			const style = theme.m(1, 2, 3)
+			expect(style).toEqual({
+				margin: '1px',
+				'@media screen and (min-width: 20em)': {
+					margin: '2px',
+				},
+				'@media screen and (min-width: 40em)': {
+					margin: '3px',
+				},
+			})
+		})
+
+		it('can get responsive arrays', () => {
+			const style = theme.m([1, 2, 3])
+			expect(style).toEqual(theme.m(1, 2, 3))
 			expect(style).toEqual({
 				margin: '1px',
 				'@media screen and (min-width: 20em)': {
@@ -182,6 +196,9 @@ describe('style system', () => {
 			})
 			expect(theme.bg('red')).toEqual({
 				backgroundColor: 'tomato',
+			})
+			expect(theme.bc('red')).toEqual({
+				borderColor: 'tomato',
 			})
 		})
 
@@ -402,6 +419,31 @@ describe('style system', () => {
 			}
 		`,
 			)
+		})
+
+		it('can compose styles form a props object', () => {
+			const { theme } = makeStyleTheme({ spacing, breakpoints })
+			const $ = theme
+
+			expect($.fromProps({ p: [1, 2], m: 3, foo: 'bar' }))
+				.toMatchInlineSnapshot(`
+			Object {
+			  "@media screen and (min-width: 20em)": Object {
+			    "padding": "2px",
+			  },
+			  "margin": "3px",
+			  "padding": "1px",
+			}
+		`)
+		})
+
+		it('compose is communicative', () => {
+			const { theme } = makeStyleTheme({ spacing, breakpoints })
+			const $ = theme
+
+			const style1 = $.compose($.p(1), { foo: 'bar' }, $.p(1, 2, 3))
+			const style2 = $.compose({ foo: 'bar' }, $.p(1, 2, 3), $.p(1))
+			expect(style1).toEqual(style2)
 		})
 	})
 })
