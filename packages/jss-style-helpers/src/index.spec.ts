@@ -370,33 +370,34 @@ describe('style system', () => {
 			expect(theme2.breakpoints[0]).toEqual('20em')
 		})
 
-		it('composes responsive styles', () => {
+		describe('compose', () => {
 			const { theme } = makeStyleTheme({ spacing, breakpoints })
 			const $ = theme
-			const styleObj = $.compose(
-				$.m(1, 2, 3),
-				$.p(1, 2, 3),
-				$.t(1, 2, 3),
-				$.responsive('display', 'block', 'inline-block', null, 'flex'),
-			)
-			expect(styleObj).toMatchInlineSnapshot(
-				{
-					top: '1px',
-					margin: '1px',
-					padding: '1px',
-					display: 'block',
-					'@media screen and (min-width: 20em)': {
-						top: '2px',
-						margin: '2px',
-						padding: '2px',
+			it('composes responsive styles', () => {
+				const styleObj = $.compose(
+					$.m(1, 2, 3),
+					$.p(1, 2, 3),
+					$.t(1, 2, 3),
+					$.responsive('display', 'block', 'inline-block', null, 'flex'),
+				)
+				expect(styleObj).toMatchInlineSnapshot(
+					{
+						top: '1px',
+						margin: '1px',
+						padding: '1px',
+						display: 'block',
+						'@media screen and (min-width: 20em)': {
+							top: '2px',
+							margin: '2px',
+							padding: '2px',
+						},
+						'@media screen and (min-width: 40em)': {
+							top: '3px',
+							margin: '3px',
+							padding: '3px',
+						},
 					},
-					'@media screen and (min-width: 40em)': {
-						top: '3px',
-						margin: '3px',
-						padding: '3px',
-					},
-				},
-				`
+					`
 			Object {
 			  "@media screen and (min-width: 20em)": Object {
 			    "display": "inline-block",
@@ -418,15 +419,22 @@ describe('style system', () => {
 			  "top": "1px",
 			}
 		`,
-			)
+				)
+			})
+
+			it('is communicative', () => {
+				const style1 = $.compose($.p(1), { foo: 'bar' }, $.p(1, 2, 3))
+				const style2 = $.compose({ foo: 'bar' }, $.p(1, 2, 3), $.p(1))
+				expect(style1).toEqual(style2)
+			})
 		})
 
-		it('can compose styles form a props object', () => {
+		describe('fromProps', () => {
 			const { theme } = makeStyleTheme({ spacing, breakpoints })
 			const $ = theme
 
-			expect($.fromProps({ p: [1, 2], m: 3, foo: 'bar' }))
-				.toMatchInlineSnapshot(`
+			it('can compose styles form a props object', () => {
+				expect($.fromProps({ p: [1, 2], m: 3 })).toMatchInlineSnapshot(`
 			Object {
 			  "@media screen and (min-width: 20em)": Object {
 			    "padding": "2px",
@@ -435,15 +443,44 @@ describe('style system', () => {
 			  "padding": "1px",
 			}
 		`)
+			})
+
+			it('omits keys that are not helper functions', () => {
+				const styles = $.fromProps({ m: 1, foo: 'bar', borderWidth: 'kuku' })
+				expect('foo' in styles).toBe(false)
+				expect('borderWidth' in styles).toBe(false)
+			})
 		})
 
-		it('compose is communicative', () => {
+		describe('apply', () => {
 			const { theme } = makeStyleTheme({ spacing, breakpoints })
 			const $ = theme
 
-			const style1 = $.compose($.p(1), { foo: 'bar' }, $.p(1, 2, 3))
-			const style2 = $.compose({ foo: 'bar' }, $.p(1, 2, 3), $.p(1))
-			expect(style1).toEqual(style2)
+			it('can apply helpers to a style object', () => {
+				const styles = $.apply({
+					m: [1, 2, 3],
+					p: [2, 3],
+					borderWidth: ['1rem', '2rem', '3rem'],
+					borderStyle: 'dashed',
+				})
+				expect(styles).toMatchInlineSnapshot(`
+			Object {
+			  "@media screen and (min-width: 20em)": Object {
+			    "borderWidth": "2rem",
+			    "margin": "2px",
+			    "padding": "3px",
+			  },
+			  "@media screen and (min-width: 40em)": Object {
+			    "borderWidth": "3rem",
+			    "margin": "3px",
+			  },
+			  "borderStyle": "dashed",
+			  "borderWidth": "1rem",
+			  "margin": "1px",
+			  "padding": "2px",
+			}
+		`)
+			})
 		})
 	})
 })

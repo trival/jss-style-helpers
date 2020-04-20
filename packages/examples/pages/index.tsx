@@ -6,6 +6,7 @@ export default () => {
 	return (
 		<article>
 			<h1 className={styles.foo}>Hello World</h1>
+			<p className={styles.bar}>Hello apply function</p>
 			<Typography variant="active">Some active text</Typography>
 		</article>
 	)
@@ -42,4 +43,17 @@ const useStyles = makeStyles(($) => ({
 			boxShadow: `0 2px 3px ${$.colors.dark}`,
 		},
 	),
+
+	// or use the shorthand apply function, same as above:
+	bar: $.apply({
+		mx: 0,
+		my: [1, 2, 3, 4],
+		p: [2, 3, 4],
+		bg: $.colors.red,
+		c: 'light',
+		bc: '#abc',
+		borderWidth: ['thin', null, 'thick'],
+		borderStyle: 'solid',
+		boxShadow: `0 2px 3px ${$.colors.dark}`,
+	}),
 }))

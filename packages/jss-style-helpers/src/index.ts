@@ -224,9 +224,32 @@ export function makeStyleTheme<
 		return compose(...styleObj)
 	}
 
+	function apply(
+		styles: { [K in keyof StyleHelpers]?: StylePropsType<typeof helpers[K]> } &
+			{
+				[K in keyof CSS.Properties]?:
+					| CSS.Properties[K]
+					| Array<CSS.Properties[K] | null | undefined>
+			},
+	): CSSProperties {
+		const styleObj = Object.keys(styles).map((key) => {
+			const val = (styles as any)[key]
+			if (typeof (helpers as any)[key] === 'function') {
+				return (helpers as any)[key](val)
+			}
+			if (Array.isArray(val)) {
+				return helpers.responsive(key as any, ...(val as [any, any]))
+			}
+			return { [key]: val }
+		})
+
+		return compose(...styleObj)
+	}
+
 	const theme = {
 		compose,
 		mediaQueries,
+		apply,
 		fromProps,
 		...helpers,
 		...themeConfig,
@@ -239,7 +262,6 @@ export function makeStyleTheme<
 		styles:
 			| StyleRules<Props, ClassKey>
 			| ((t: typeof theme) => StyleRules<Props, ClassKey>),
-		// | StyleRules<Props, ClassKey>,
 		options?: JSS.StyleSheetFactoryOptions,
 	): (props?: Props) => Record<ClassKey, string> {
 		return createUseStyles(styles, options) as any
@@ -289,9 +311,8 @@ function atBreakpoint(s: StyleValue) {
 	return `@media screen and (min-width: ${s})`
 }
 
-type ArrayType<A> = A extends Array<infer T> ? T : never
 export type StylePropsType<T> = T extends (...args: infer R) => any
-	? ArrayType<R>
+	? R[0]
 	: never
 export type StyleProps<
 	T extends { [S in keyof StyleHelpers]: any },

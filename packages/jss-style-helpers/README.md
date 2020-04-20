@@ -98,6 +98,7 @@ const useStyles = makeStyles(($) => ({
 
     // use other react-jss style properties
     {
+      borderStyle: 'solid',
       boxShadow: `0 2px 3px ${$.colors.dark}`,
     },
   ),
@@ -109,6 +110,9 @@ const useStyles = makeStyles(($) => ({
     p: [2, 3, 4],
     bg: $.colors.red,
     c: 'light',
+    bc: '#abc',
+    borderWidth: ['thin', null, 'thick'],
+    borderStyle: 'solid',
     boxShadow: `0 2px 3px ${$.colors.dark}`,
   }),
 }))
