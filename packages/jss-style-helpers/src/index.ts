@@ -297,13 +297,15 @@ function merge(a: any, b: any) {
 	const result = { ...a, ...b }
 	for (const key in b) {
 		if (a[key] && typeof b[key] === 'object') {
-			result[key] = Object.assign(a[key], b[key])
+			result[key] = merge(a[key], b[key])
 		}
 	}
 	return result
 }
 
-function compose(...args: CSSProperties[]): CSSProperties {
+function compose(
+	...args: Array<CSSProperties | null | undefined | false | 0 | ''>
+): CSSProperties {
 	return args.reduce(merge, {})
 }
 

@@ -427,6 +427,16 @@ describe('style system', () => {
 				const style2 = $.compose({ foo: 'bar' }, $.p(1, 2, 3), $.p(1))
 				expect(style1).toEqual(style2)
 			})
+
+			it('can handle empty and falsy values', () => {
+				expect($.compose()).toEqual({})
+				expect($.compose(undefined)).toEqual({})
+				expect($.compose(null)).toEqual({})
+				expect($.compose(null, undefined, false, 0, '')).toEqual({})
+				expect(
+					$.compose(null, { foo: 'bar' }, undefined, false, 0, ''),
+				).toEqual({ foo: 'bar' })
+			})
 		})
 
 		describe('fromProps', () => {
