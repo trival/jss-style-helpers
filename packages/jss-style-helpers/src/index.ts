@@ -1,8 +1,8 @@
 // import { makeStyles } from '@material-ui/styles'
+import * as CSS from 'csstype'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as JSS from 'jss'
 import { createUseStyles } from 'react-jss'
-import * as CSS from './cssTypes'
 
 type StyleValue = 0 | (string & {})
 
@@ -264,7 +264,7 @@ export function makeStyleTheme<
 			| ((t: typeof theme) => StyleRules<Props, ClassKey>),
 		options?: JSS.StyleSheetFactoryOptions,
 	): (props?: Props) => Record<ClassKey, string> {
-		return createUseStyles(styles, options) as any
+		return createUseStyles(styles as any, options) as any
 	}
 
 	// makeStyles()

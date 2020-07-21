@@ -29,17 +29,17 @@
   },
   "homepage": "https://github.com/trival/jss-style-helpers#readme",
   "dependencies": {
-    "csstype": "^2.6.9"
+    "csstype": "^3.0.0-beta.4"
   },
   "peerDependencies": {
     "react-jss": "^10.1.1"
   },
   "devDependencies": {
-    "@material-ui/styles": "^4.9.6",
-    "@types/jest": "^25.1.4",
-    "jss": "^10.1.1",
-    "react-jss": "^10.1.1",
-    "typescript": "^3.8.3"
+    "@material-ui/styles": "^4.10.0",
+    "@types/jest": "^26.0.5",
+    "jss": "^10.3.0",
+    "react-jss": "^10.3.0",
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">=8",

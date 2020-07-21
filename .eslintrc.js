@@ -65,6 +65,8 @@ module.exports = {
 		'@typescript-eslint/no-non-null-assertion': 'off',
 		// '@typescript-eslint/no-unused-vars': 'warn',
 		'@typescript-eslint/no-use-before-define': 'off',
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
+		'@typescript-eslint/ban-types': 'off',
 
 		'react/react-in-jsx-scope': 'off',
 		'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
