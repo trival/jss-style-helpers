@@ -182,15 +182,12 @@ export function makeStyleHelpers<
 			}
 			return responsiveStyles.reduce(
 				(styles, styleVal, i) =>
-					styleVal != null
-						? merge(styles, {
-								[atBreakpoint(breakpoints[i])]: makeStyleObject(
-									keysArray,
-									styleVal as string,
-									scale,
-								),
-						  })
-						: styles,
+					merge(styles, {
+						[atBreakpoint(breakpoints[i])]:
+							styleVal != null
+								? makeStyleObject(keysArray, styleVal as string, scale)
+								: {},
+					}),
 				makeStyleObject(keysArray, generalStyle as string, scale),
 			)
 		}
@@ -303,10 +300,24 @@ function merge(a: any, b: any) {
 	return result
 }
 
+function cleanupEmptyObjects<T extends object>(obj: T): T {
+	for (const key of Object.keys(obj)) {
+		const val = (obj as any)[key]
+		if (typeof val === 'object') {
+			if (Object.keys(val).length === 0) {
+				delete (obj as any)[key]
+			} else {
+				cleanupEmptyObjects(val)
+			}
+		}
+	}
+	return obj
+}
+
 function compose(
 	...args: Array<CSSProperties | null | undefined | false | 0 | ''>
 ): CSSProperties {
-	return args.reduce(merge, {})
+	return cleanupEmptyObjects(args.reduce(merge, {}))
 }
 
 function atBreakpoint(s: StyleValue) {

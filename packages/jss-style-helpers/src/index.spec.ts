@@ -249,6 +249,7 @@ describe('style system', () => {
 			expect(theme.position('absolute', null, 'relative', 'fixed'))
 				.toMatchInlineSnapshot(`
 			Object {
+			  "@media screen and (min-width: 20em)": Object {},
 			  "@media screen and (min-width: 40em)": Object {
 			    "position": "relative",
 			  },
@@ -261,6 +262,7 @@ describe('style system', () => {
 			expect(theme.display('block', null, 'inline-block', 'inline'))
 				.toMatchInlineSnapshot(`
 			Object {
+			  "@media screen and (min-width: 20em)": Object {},
 			  "@media screen and (min-width: 40em)": Object {
 			    "display": "inline-block",
 			  },
@@ -310,6 +312,7 @@ describe('style system', () => {
 				theme.responsive('position', 'absolute', null, 'relative', 'fixed'),
 			).toMatchInlineSnapshot(`
 			Object {
+			  "@media screen and (min-width: 20em)": Object {},
 			  "@media screen and (min-width: 40em)": Object {
 			    "position": "relative",
 			  },
@@ -452,7 +455,7 @@ describe('style system', () => {
 						},
 					},
 				)
-				console.log(composed)
+
 				expect(composed).toEqual({
 					'@media': {
 						'&&': $.compose($.p(3), $.m(3)),
