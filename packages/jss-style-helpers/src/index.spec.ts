@@ -373,6 +373,7 @@ describe('style system', () => {
 		describe('compose', () => {
 			const { theme } = makeStyleTheme({ spacing, breakpoints })
 			const $ = theme
+
 			it('composes responsive styles', () => {
 				const styleObj = $.compose(
 					$.m(1, 2, 3),
@@ -436,6 +437,27 @@ describe('style system', () => {
 				expect(
 					$.compose(null, { foo: 'bar' }, undefined, false, 0, ''),
 				).toEqual({ foo: 'bar' })
+			})
+
+			it('composes nested styles', () => {
+				const composed = $.compose(
+					{
+						'@media': {
+							'&&': $.p(3),
+						},
+					},
+					{
+						'@media': {
+							'&&': $.m(3),
+						},
+					},
+				)
+				console.log(composed)
+				expect(composed).toEqual({
+					'@media': {
+						'&&': $.compose($.p(3), $.m(3)),
+					},
+				})
 			})
 		})
 

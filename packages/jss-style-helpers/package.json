@@ -1,6 +1,6 @@
 {
   "name": "jss-style-helpers",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Custom react-jss theme with helper functions based on system ui theme specification",
   "main": "dist/index",
   "types": "src/index.ts",
@@ -29,17 +29,17 @@
   },
   "homepage": "https://github.com/trival/jss-style-helpers#readme",
   "dependencies": {
-    "csstype": "^3.0.0-beta.4"
+    "csstype": "^3.0.5"
   },
   "peerDependencies": {
     "react-jss": "^10.1.1"
   },
   "devDependencies": {
     "@material-ui/styles": "^4.10.0",
-    "@types/jest": "^26.0.5",
-    "jss": "^10.3.0",
-    "react-jss": "^10.3.0",
-    "typescript": "^3.9.7"
+    "@types/jest": "^26.0.15",
+    "jss": "^10.4.0",
+    "react-jss": "^10.4.0",
+    "typescript": "^4.0.5"
   },
   "engines": {
     "node": ">=8",

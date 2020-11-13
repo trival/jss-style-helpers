@@ -1,7 +1,7 @@
 import { makeStyles } from '../components/theme'
 import { Typography } from '../components/typography'
 
-export default () => {
+export default function IndexPage () {
 	const styles = useStyles()
 	return (
 		<article>
